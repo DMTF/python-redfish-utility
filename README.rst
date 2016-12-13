@@ -17,7 +17,14 @@ Description
 
  The Redfish Utility is a command line interface that allows you to manage servers that take advantage of Redfish APIs. For this release of the utility, you can manage any server running a Redfish API. You can install the utility on your computer for remote use. In addition to using the utility manually to execute individual commands, you can create scripts to automate tasks.
 
-Building from executable from file source
+Running the utility from command line
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: console
+
+	python.exe rdmc.py
+	
+Building an executable from file source
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
  For this process you will need to install pyinstaller for python.
@@ -32,7 +39,7 @@ Requirements
 
 Usage
 ----------
- For further usage pelase refer to our slate documentation: <insert link here>
+ For further usage please refer to our slate documentation: `https://dmtf.github.io/python-redfish-utility/ <https://dmtf.github.io/python-redfish-utility/>`_
 
 Contributing
 ----------
