@@ -509,7 +509,7 @@ Name=BIOS Configuration Pending Settings
 redfish > login xx.xx.xx.xx –u username –p password 
 Discovering data...Done
 WARNING: Cache is activated session keys are stored in plaintext
-redfish > select HpBios.
+redfish > select Bios.
 redfish > list --json
 {
   "@odata.context": "/redfish/v1/$metadata#Bios.Bios",
