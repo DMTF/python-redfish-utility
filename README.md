@@ -1,2 +1,2 @@
 # python-redfish-utility
-Python-based utility for interacting with devices supporting a Redfish Service
+The Redfish Utility is a command line interface that allows you to manage products that take advantage of Redfish APIs. Create and edit commands that extend the redfish python library.
