@@ -43,8 +43,8 @@ class CommitCommand(RdmcCommandBase):
             if not self._rdmc.app.commit(verbose=self._rdmc.opts.verbose):
                 raise NoChangesFoundOrMadeError("No changes found or made " \
                                                     "during commit operation.")
-        except Exception, excp:
-            raise excp
+        except Exception:
+            raise
 
         self.logoutobj.logoutfunction("")
 

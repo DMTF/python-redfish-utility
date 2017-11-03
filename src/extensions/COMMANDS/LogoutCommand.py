@@ -53,8 +53,8 @@ class LogoutCommand(RdmcCommandBase):
         try:
             sys.stdout.write(u"Logging session out.\n")
             self.logoutfunction(line)
-        except Exception, excp:
-            raise excp
+        except Exception:
+            raise
 
         #Return code
         return ReturnCodes.SUCCESS
