@@ -50,16 +50,21 @@ for name in extensions.classNames:
     try:
         extensions._Commands[cName] = getattr(\
                                         importlib.import_module(pkgName), cName)
-    except Exception, excp:
+    except Exception:
         sys.stderr.write("Error locating extension %s at location %s\n" % \
                                                 (cName, 'extensions' + name))
-        raise excp
+        raise
+
+try:
+   input = raw_input
+except NameError:
+   pass
 
 #---------End of imports---------
 
 # always flush stdout and stderr
-sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-sys.stderr = os.fdopen(sys.stderr.fileno(), 'w', 0)
+#sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+#sys.stderr = os.fdopen(sys.stderr.fileno(), 'w', 0)
 
 CLI = cliutils.CLI()
 
@@ -198,7 +203,7 @@ class RdmcCommand(RdmcCommandBase):
         if logdir:
             try:
                 os.makedirs(logdir)
-            except OSError, ex:
+            except OSError as ex:
                 if ex.errno == errno.EEXIST:
                     pass
                 else:
@@ -226,7 +231,7 @@ class RdmcCommand(RdmcCommandBase):
         if cachedir:
             try:
                 os.makedirs(cachedir)
-            except OSError, ex:
+            except OSError as ex:
                 if ex.errno == errno.EEXIST:
                     pass
                 else:
@@ -243,7 +248,7 @@ class RdmcCommand(RdmcCommandBase):
                 if self.app.config.get_cache():
                     if ("logout" not in line) and ("--logout" not in line):
                         self.app.save()
-            except Exception, excp:
+            except Exception as excp:
                 self.handle_exceptions(excp)
 
             return self.retcode
@@ -289,7 +294,7 @@ class RdmcCommand(RdmcCommandBase):
         #***************************************************
 
         while True:
-            line = raw_input(versioning.__shortname__+' > ')
+            line = input(versioning.__shortname__+' > ')
             readline.add_history(line)
 
             if not len(line):
@@ -305,7 +310,7 @@ class RdmcCommand(RdmcCommandBase):
 
                 self.retcode = self._run_command(opts, nargv)
                 self.check_for_tab_lists(nargv)
-            except Exception, excp:
+            except Exception as excp:
                 self.handle_exceptions(excp)
 
             if self.opts.verbose:
@@ -322,54 +327,54 @@ class RdmcCommand(RdmcCommandBase):
         try:
             raise
         # ****** RDMC ERRORS ******
-        except ConfigurationFileError, excp:
+        except ConfigurationFileError as excp:
             self.retcode = ReturnCodes.CONFIGURATION_FILE_ERROR
             UI().error(excp)
             sys.exit(excp.errcode)
-        except CommandNotEnabledError, excp:
+        except CommandNotEnabledError as excp:
             self.retcode = ReturnCodes.COMMAND_NOT_ENABLED_ERROR
             UI().command_not_enabled(excp)
             extensions._Commands['HelpCommand'](rdmc=self).run("")
-        except InvalidCommandLineError, excp:
+        except InvalidCommandLineError as excp:
             self.retcode = ReturnCodes.INVALID_COMMAND_LINE_ERROR
             UI().invalid_commmand_line(excp)
-        except NoCurrentSessionEstablished, excp:
+        except NoCurrentSessionEstablished as excp:
             self.retcode = ReturnCodes.NO_CURRENT_SESSION_ESTABLISHED
             UI().error(excp)
-        except NoChangesFoundOrMadeError, excp:
+        except NoChangesFoundOrMadeError as excp:
             self.retcode = ReturnCodes.NO_CHANGES_MADE_OR_FOUND
             UI().invalid_commmand_line(excp)
-        except InvalidFileInputError, excp:
+        except InvalidFileInputError as excp:
             self.retcode = ReturnCodes.INVALID_FILE_INPUT_ERROR
             UI().invalid_commmand_line(excp)
-        except InvalidCommandLineErrorOPTS, excp:
+        except InvalidCommandLineErrorOPTS as excp:
             self.retcode = ReturnCodes.INVALID_COMMAND_LINE_ERROR
-        except InvalidFileFormattingError, excp:
+        except InvalidFileFormattingError as excp:
             self.retcode = ReturnCodes.INVALID_FILE_FORMATTING_ERROR
             UI().invalid_file_formatting(excp)
-        except NoContentsFoundForOperationError, excp:
+        except NoContentsFoundForOperationError as excp:
             self.retcode = ReturnCodes.NO_CONTENTS_FOUND_FOR_OPERATION
             UI().no_contents_found_for_operation(excp)
-        except InfoMissingEntriesError, excp:
+        except InfoMissingEntriesError as excp:
             self.retcode = ReturnCodes.NO_VALID_INFO_ERROR
             UI().error(excp)
-        except InvalidOrNothingChangedSettingsError, excp:
+        except InvalidOrNothingChangedSettingsError as excp:
             self.retcode = ReturnCodes.SAME_SETTINGS_ERROR
             UI().error(excp)
-        except NoDifferencesFoundError, excp:
+        except NoDifferencesFoundError as excp:
             self.retcode = ReturnCodes.NO_CHANGES_MADE_OR_FOUND
             UI().no_differences_found(excp)
-        except MultipleServerConfigError, excp:
+        except MultipleServerConfigError as excp:
             self.retcode = ReturnCodes.MULTIPLE_SERVER_CONFIG_FAIL
             UI().multiple_server_config_fail(excp)
-        except InvalidMSCfileInputError, excp:
+        except InvalidMSCfileInputError as excp:
             self.retcode = ReturnCodes.MULTIPLE_SERVER_INPUT_FILE_ERROR
             UI().multiple_server_config_input_file(excp)
-        except FailureDuringCommitError, excp:
+        except FailureDuringCommitError as excp:
             self.retcode = ReturnCodes.FAILURE_DURING_COMMIT_OPERATION
             UI().error(excp)
         # ****** CLI ERRORS ******
-        except cliutils.CommandNotFoundException, excp:
+        except cliutils.CommandNotFoundException as excp:
             self.retcode = ReturnCodes.UI_CLI_COMMAND_NOT_FOUND_EXCEPTION
             UI().command_not_found(excp)
             extensions._Commands['HelpCommand'](rdmc=self).run("")
@@ -377,45 +382,45 @@ class RdmcCommand(RdmcCommandBase):
         except redfish.ris.UndefinedClientError:
             self.retcode = ReturnCodes.RIS_UNDEFINED_CLIENT_ERROR
             UI().error(u"Please login before making a selection")
-        except redfish.ris.InstanceNotFoundError, excp:
+        except redfish.ris.InstanceNotFoundError as excp:
             self.retcode = ReturnCodes.RIS_INSTANCE_NOT_FOUND_ERROR
             UI().printmsg(excp)
-        except redfish.ris.CurrentlyLoggedInError, excp:
+        except redfish.ris.CurrentlyLoggedInError as excp:
             self.retcode = ReturnCodes.RIS_CURRENTLY_LOGGED_IN_ERROR
             UI().error(excp)
-        except redfish.ris.NothingSelectedError, excp:
+        except redfish.ris.NothingSelectedError as excp:
             self.retcode = ReturnCodes.RIS_NOTHING_SELECTED_ERROR
             UI().nothing_selected()
-        except redfish.ris.NothingSelectedSetError, excp:
+        except redfish.ris.NothingSelectedSetError as excp:
             self.retcode = ReturnCodes.RIS_NOTHING_SELECTED_SET_ERROR
             UI().nothing_selected_set()
-        except redfish.ris.InvalidSelectionError, excp:
+        except redfish.ris.InvalidSelectionError as excp:
             self.retcode = ReturnCodes.RIS_INVALID_SELECTION_ERROR
             UI().error(excp)
-        except redfish.ris.rmc_helper.SessionExpired, excp:
+        except redfish.ris.rmc_helper.SessionExpired as excp:
             self.retcode = ReturnCodes.RIS_SESSION_EXPIRED
             self.app.logout()
             UI().printmsg(u"Current session has expired or is invalid, "\
                     "please login again with proper credentials to continue.\n")
         # ****** RMC/RIS ERRORS ******
-        except redfish.rest.v1.RetriesExhaustedError, excp:
+        except redfish.rest.v1.RetriesExhaustedError as excp:
             self.retcode = ReturnCodes.V1_RETRIES_EXHAUSTED_ERROR
             UI().retries_exhausted_attemps()
-        except redfish.rest.v1.InvalidCredentialsError, excp:
+        except redfish.rest.v1.InvalidCredentialsError as excp:
             self.retcode = ReturnCodes.V1_INVALID_CREDENTIALS_ERROR
             UI().invalid_credentials(excp)
-        except redfish.rest.v1.ServerDownOrUnreachableError, excp:
+        except redfish.rest.v1.ServerDownOrUnreachableError as excp:
             self.retcode = \
                     ReturnCodes.V1_SERVER_DOWN_OR_UNREACHABLE_ERROR
             UI().error(excp)
-        except redfish.ris.rmc_helper.InvalidPathError, excp:
+        except redfish.ris.rmc_helper.InvalidPathError as excp:
             self.retcode = ReturnCodes.RIS_REF_PATH_NOT_FOUND_ERROR
             UI().printmsg(u"Reference path not found.")
         # ****** GENERAL ERRORS ******
         except SystemExit:
             self.retcode = ReturnCodes.GENERAL_ERROR
             raise
-        except Exception, excp:
+        except Exception as excp:
             self.retcode = ReturnCodes.GENERAL_ERROR
             sys.stderr.write(u'ERROR: %s\n' % excp)
 
@@ -558,7 +563,7 @@ if __name__ == '__main__':
             try:
                 RDMC.add_command(extensions._Commands[cName](RDMC), \
                                                                 section=sName)
-            except Exception, excp:
+            except Exception as excp:
                 sys.stderr.write("Error loading extension: %s\n" % cName)
                 sys.stderr.write("\t" + excp.message + '\n')
 

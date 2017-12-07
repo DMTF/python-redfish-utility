@@ -12,7 +12,7 @@ import json
 import shlex
 import subprocess
 
-from Queue import Queue
+from queue import Queue
 from datetime import datetime
 from optparse import OptionParser
 from rdmc_helper import ReturnCodes, InvalidCommandLineError, \
@@ -162,14 +162,14 @@ class LoadCommand(RdmcCommandBase):
                                 if self._rdmc.app.loadset(\
                                       dicttolist=dicttolist):
                                     results = True
-                            except LoadSkipSettingError, excp:
+                            except LoadSkipSettingError:
                                 returnValue = True
                                 results = True
                                 pass
-                            except Exception, excp:
-                                raise excp
-                    except Exception, excp:
-                        raise excp
+                            except Exception:
+                                raise
+                    except Exception:
+                        raise
 
                 if skip:
                     continue
@@ -177,11 +177,11 @@ class LoadCommand(RdmcCommandBase):
                 try:
                     if results:
                         self.comobj.commitfunction()
-                except NoChangesFoundOrMadeError, excp:
+                except NoChangesFoundOrMadeError:
                     if returnValue:
                         pass
                     else:
-                        raise excp
+                        raise
 
             if not results:
                 raise NoDifferencesFoundError("No differences found from " \
@@ -252,11 +252,11 @@ class LoadCommand(RdmcCommandBase):
         try:
             if runlogin:
                 self.lobobj.loginfunction(inputline)
-        except Exception, excp:
+        except Exception:
             if options.mpfilename:
                 pass
             else:
-                raise excp
+                raise
 
         #filename validations and checks
         if options.filename:
@@ -433,8 +433,8 @@ class LoadCommand(RdmcCommandBase):
                         line = str(line).replace("\n", "")
                         self.queue.put(linelist)
                         data.append(linelist)
-        except Exception, excp:
-            raise excp
+        except Exception:
+            raise
 
         if data:
             return data

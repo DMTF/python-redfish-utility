@@ -61,8 +61,8 @@ class LoginCommand(RdmcCommandBase):
                           verbose=self._rdmc.opts.verbose, \
                           path=options.path, skipbuild=skipbuild, \
                           includelogs=options.includelogs)
-        except Exception, excp:
-            raise excp
+        except Exception:
+            raise
 
         # Warning for cache enabled, since we save session in plain text
         if self._rdmc.app.config.get_cache() and not skipbuild:
@@ -95,7 +95,7 @@ class LoginCommand(RdmcCommandBase):
                 if self._rdmc.opts.verbose:
                     sys.stdout.write("Selected option: '%s'" % options.selector)
                     sys.stdout.write('\n')
-            except Exception, excp:
+            except Exception as excp:
                 raise redfish.ris.InstanceNotFoundError(excp)
 
     def loginvalidation(self, options, args):
@@ -159,8 +159,8 @@ class LoginCommand(RdmcCommandBase):
                 self.logoutobj.run("")
                 raise PathUnavailableError("The path specified by the --path"\
                                 " flag is unavailable.")
-        except Exception, excp:
-            raise excp
+        except Exception:
+            raise
 
         #Return code
         return ReturnCodes.SUCCESS

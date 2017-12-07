@@ -110,8 +110,8 @@ class SetCommand(RdmcCommandBase):
                                 sys.stdout.write("Added the following" \
                                                                     " patch:\n")
                                 UI().print_out_json(content)
-                except Exception, excp:
-                    raise excp
+                except Exception:
+                    raise
 
             if options.commit:
                 self.comobj.commitfunction()

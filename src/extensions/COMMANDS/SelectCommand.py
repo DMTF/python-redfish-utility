@@ -95,7 +95,7 @@ class SelectCommand(RdmcCommandBase):
                                 " list of types, or pass your type by using" \
                                 " the '--selector' flag.")
 
-        except redfish.ris.InstanceNotFoundError, infe:
+        except redfish.ris.InstanceNotFoundError as infe:
             raise redfish.ris.InstanceNotFoundError(infe)
 
     def selectvalidation(self, options):

@@ -67,7 +67,7 @@ class TypesCommand(RdmcCommandBase):
                 raise InvalidCommandLineError("The 'types' command does not "\
                                                         "take any arguments.")
 
-        except redfish.ris.InstanceNotFoundError, infe:
+        except redfish.ris.InstanceNotFoundError as infe:
             raise redfish.ris.InstanceNotFoundError(infe)
 
     def run(self, line):

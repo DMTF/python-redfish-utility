@@ -61,7 +61,7 @@ class RawPutCommand(RdmcCommandBase):
             try:
                 inputfile = open(args[0], 'r')
                 contentsholder = json.loads(inputfile.read())
-            except Exception, excp:
+            except Exception as excp:
                 raise InvalidFileInputError("%s" % excp)
         elif len(args) > 1:
             raise InvalidCommandLineError("Raw put only takes 1 argument.\n")

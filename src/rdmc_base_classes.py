@@ -106,7 +106,7 @@ class CommandBase(object):
         lines.append(' '.join(line))
 
         sep = '\n' + (' ' * 34)
-        print "  %-28s - %s" % (self.name, sep.join(lines))
+        print("  %-28s - %s" % (self.name, sep.join(lines)))
 
     def _parse_arglist(self, line=None):
         """parses line into an options and args taking
