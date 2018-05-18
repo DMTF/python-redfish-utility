@@ -80,7 +80,7 @@ class SetCommand(RdmcCommandBase):
                 if "/" in sel and not "/" in str(val):
                     newargs = arg.split("/")
                 elif "/" in sel:
-                    items = arg.split('=',1)
+                    items = arg.split('=', 1)
                     newargs = items[0].split('/')
                     newargs[-1] = newargs[-1] + '=' + items[-1]
                     arg = newargs[-1]
@@ -90,28 +90,25 @@ class SetCommand(RdmcCommandBase):
                         if val[0] == "[" and val[-1] == "]":
                             val = val[1:-1].split(',')
 
-                try:
-                    if not newargs:
-                        contents = self._rdmc.app.loadset(selector=sel, val=val)
-                    else:
-                        contents = self._rdmc.app.loadset(val=val,\
-                            newargs=newargs)
+                if not newargs:
+                    contents = self._rdmc.app.loadset(selector=sel, val=val)
+                else:
+                    contents = self._rdmc.app.loadset(val=val,\
+                        newargs=newargs)
 
-                    if contents == "No entries found":
-                        raise InvalidOrNothingChangedSettingsError("No " \
-                                       "entries found in the current " \
-                                       "selection for the setting '%s'." % sel)
-                    elif contents == "reverting":
-                        sys.stdout.write("Removing previous patch and "\
-                                         "returning to the original value.\n")
-                    else:
-                        for content in contents:
-                            if self._rdmc.opts.verbose:
-                                sys.stdout.write("Added the following" \
-                                                                    " patch:\n")
-                                UI().print_out_json(content)
-                except Exception:
-                    raise
+                if contents == "No entries found":
+                    raise InvalidOrNothingChangedSettingsError("No " \
+                                   "entries found in the current " \
+                                   "selection for the setting '%s'." % sel)
+                elif contents == "reverting":
+                    sys.stdout.write("Removing previous patch and "\
+                                     "returning to the original value.\n")
+                else:
+                    for content in contents:
+                        if self._rdmc.opts.verbose:
+                            sys.stdout.write("Added the following" \
+                                                                " patch:\n")
+                            UI().print_out_json(content)
 
             if options.commit:
                 self.comobj.commitfunction()

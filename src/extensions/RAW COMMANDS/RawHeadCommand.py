@@ -75,7 +75,7 @@ class RawHeadCommand(RdmcCommandBase):
 
             for item in content:
                 if isinstance(item, dict):
-                    for key, value in item.iteritems():
+                    for key, value in item.items():
                         tempdict[key] = value
                 else:
                     item = item.replace(": ", ":").replace("\r\n", "").\
@@ -89,7 +89,7 @@ class RawHeadCommand(RdmcCommandBase):
                 filehndl.write(output)
                 filehndl.close()
 
-                sys.stdout.write(u"Results written out to '%s'.\n" % \
+                sys.stdout.write("Results written out to '%s'.\n" % \
                                                             options.filename[0])
             else:
                 UI().print_out_json(tempdict)

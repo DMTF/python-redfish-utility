@@ -41,7 +41,7 @@ def get_user_config_dir():
                              wintypes.HANDLE, wintypes.DWORD, wintypes.LPCWSTR]
 
 
-            path_buf = wintypes.create_unicode_buffer(wintypes.MAX_PATH)
+            path_buf = ctypes.create_unicode_buffer(wintypes.MAX_PATH)
             result = shgetfolderpath(0, csidl_appdata, 0, 0, path_buf)
 
             if result == 0:
@@ -112,21 +112,21 @@ def get_terminal_size():
     """
     _tuple = (80, 25) # default
 
-    #if os.name == 'nt':
-    #    pass
-    #else:
-    #    which_stty = find_exe('stty')
-
-    #    if which_stty:
-    #        args = [which_stty, 'size']
-    #        procs = subprocess.Popen(args, shell=False, \
-    #                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    #        (stdout_s, _) = procs.communicate()
-
-            #retcode = p.wait()
-    #        if stdout_s and re.search(r'^\d+ \d+$', stdout_s):
-    #            rows, cols = stdout_s.split()
-    #            _tuple = (cols, rows)
+    if os.name == 'nt':
+        pass
+    else:
+        which_stty = find_exe('stty')
+  
+        if which_stty:
+            args = [which_stty, 'size']
+            procs = subprocess.Popen(args, shell=False, \
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (stdout_s, _) = procs.communicate()
+  
+            retcode = procs.wait()
+            if stdout_s and re.search(r'^\d+ \d+$', stdout_s):
+                rows, cols = stdout_s.split()
+                _tuple = (cols, rows)
 
     return _tuple
 

@@ -106,7 +106,7 @@ class RawGetCommand(RdmcCommandBase):
                     filehndl.write(output)
                     filehndl.close()
 
-                    sys.stdout.write(u"Results written out to '%s'.\n" % \
+                    sys.stdout.write("Results written out to '%s'.\n" % \
                                                             options.filename[0])
                 else:
                     UI().print_out_json(results.dict)

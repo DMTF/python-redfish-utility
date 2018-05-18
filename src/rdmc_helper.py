@@ -10,6 +10,7 @@
 #---------Imports---------
 
 import sys
+import six
 import time
 import json
 import logging
@@ -171,55 +172,55 @@ class UI(object):
 
     def command_not_found(self, excp):
         """ Called when command was not found """
-        sys.stderr.write(u"\nCommand '%s' not found. Use the help command to " \
+        sys.stderr.write("\nCommand '%s' not found. Use the help command to " \
                                 "see a list of available commands\n" % excp)
 
     def command_not_enabled(self, excp):
         """ Called when command has not been enabled """
-        sys.stderr.write(u"\nCommand has not been enabled: %s\n" % excp)
+        sys.stderr.write("\nCommand has not been enabled: %s\n" % excp)
 
     def invalid_commmand_line(self, excp):
         """ Called when user entered invalid command line entries """
-        sys.stderr.write(u"Error: %s\n" % excp)
+        sys.stderr.write("Error: %s\n" % excp)
 
     def invalid_file_formatting(self, excp):
         """ Called when file formatting is unrecognizable """
-        sys.stderr.write(u"Error: %s\n" % excp)
+        sys.stderr.write("Error: %s\n" % excp)
 
     def user_not_admin(self):
         """ Called when file formatting in unrecognizable """
-        sys.stderr.write(u"Error: %s needs to be run " \
+        sys.stderr.write("Error: %s needs to be run " \
                         "as administrator.\n" % versioning.__longname__)
 
     def no_contents_found_for_operation(self, excp):
         """ Called when no contents were found for the current operation"""
-        sys.stderr.write(u"Error: %s\n" % excp)
+        sys.stderr.write("Error: %s\n" % excp)
 
     def nothing_selected(self):
         """ Called when nothing has been select yet """
-        sys.stderr.write(u"No type currently selected. Please use the" \
+        sys.stderr.write("No type currently selected. Please use the" \
                          " 'types' command to\nget a list of types, or input" \
                          " your type by using the '--selector' flag.\n")
 
     def nothing_selected_filter(self):
         """ Called when nothing has been select after a filter set """
-        sys.stderr.write(u"Nothing was found to match your provided filter.\n")
+        sys.stderr.write("Nothing was found to match your provided filter.\n")
 
     def nothing_selected_set(self):
         """ Called when nothing has been select yet """
-        sys.stderr.write(u"Nothing is selected or selection is read-only.\n")
+        sys.stderr.write("Nothing is selected or selection is read-only.\n")
 
     def no_differences_found(self, excp):
         """ Called when no difference is found in the current configuration """
-        sys.stderr.write(u"Error: %s\n" % excp)
+        sys.stderr.write("Error: %s\n" % excp)
 
     def multiple_server_config_fail(self, excp):
         """Called when one or more servers failed to load given configuration"""
-        sys.stderr.write(u"Error: %s\n" % excp)
+        sys.stderr.write("Error: %s\n" % excp)
 
     def multiple_server_config_input_file(self, excp):
         """Called when servers input file has incorrect information"""
-        sys.stderr.write(u"Error: %s\n" % excp)
+        sys.stderr.write("Error: %s\n" % excp)
 
     def invalid_credentials(self, timeout):
         """ Called user has entered invalid credentials
@@ -227,11 +228,11 @@ class UI(object):
         :param timeout: timeout given for failed login attempt
         :type timeout: int.
         """
-        sys.stderr.write(u"Validating...")
+        sys.stderr.write("Validating...")
         for _ in range(0, (int(str(timeout))+10)):
             time.sleep(1)
             sys.stderr.write(".")
-        sys.stderr.write(u"\nError: Could not authenticate. Invalid " \
+        sys.stderr.write("\nError: Could not authenticate. Invalid " \
                          "credentials, or bad username/password.\n")
 
     def error(self, msg, inner_except=None):
@@ -256,11 +257,11 @@ class UI(object):
 
     def printmsg(self, excp):
         """ Used for general print out handling """
-        sys.stderr.write(u"%s\n" % excp)
+        sys.stderr.write("%s\n" % excp)
 
     def retries_exhausted_attemps(self):
         """ Called when url retries have been exhausted """
-        sys.stderr.write(u"\nError: Could not reach URL. Retries have been" \
+        sys.stderr.write("\nError: Could not reach URL. Retries have been" \
                          " exhausted.\n")
 
     def print_out_json(self, content):
@@ -302,7 +303,7 @@ class UI(object):
                 if content.index(item) != (len(content) - 1):
                     sys.stdout.write('\n' + space)
         elif isinstance(content, dict):
-            for key, value in content.iteritems():
+            for key, value in content.items():
                 if space:
                     sys.stdout.write('\n' + space)
 
@@ -310,7 +311,7 @@ class UI(object):
                 self.pretty_human_readable(value, indent,
                                            (start + len(key) + 2))
         else:
-            content = content if isinstance(content, basestring) \
+            content = content if isinstance(content, six.string_types) \
                                                             else str(content)
 
             content = '""' if len(content) == 0 else content
