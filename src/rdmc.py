@@ -151,15 +151,16 @@ class RdmcCommand(RdmcCommandBase):
         :param line: entered command line
         :type line: list.
         """
-        if os.name == 'nt':
-            if not ctypes.windll.shell32.IsUserAnAdmin() != 0:
-                UI().user_not_admin()
-                input("Press enter to exit")
-                sys.exit(ReturnCodes.USER_NOT_ADMIN)
-        elif not os.getuid() == 0:
-            UI().user_not_admin()
-            input("Press enter to exit")
-            sys.exit(ReturnCodes.USER_NOT_ADMIN)
+		#TODO: Uncomment if admin check for local system is desired.
+        # if os.name == 'nt':
+            # if not ctypes.windll.shell32.IsUserAnAdmin() != 0:
+                # UI().user_not_admin()
+                # input("Press enter to exit")
+                # sys.exit(ReturnCodes.USER_NOT_ADMIN)
+        # elif not os.getuid() == 0:
+            # UI().user_not_admin()
+            # input("Press enter to exit")
+            # sys.exit(ReturnCodes.USER_NOT_ADMIN)
 
         nargv = []
         curr = []
