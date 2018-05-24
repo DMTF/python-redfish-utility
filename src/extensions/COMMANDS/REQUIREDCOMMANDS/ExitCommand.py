@@ -40,7 +40,7 @@ class ExitCommand(RdmcCommandBase):
 
         if args is None or len(args) == 0 or not line:
             self.logoutobj.run("")
-            sys.stdout.write(u'Bye for now\n')
+            sys.stdout.write('Bye for now\n')
 
             #System exit
             sys.exit(ReturnCodes.SUCCESS)

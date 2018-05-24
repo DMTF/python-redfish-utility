@@ -30,7 +30,7 @@ class SaveCommand(RdmcCommandBase):
             '\n\texample: save --selector ComputerSystem.\n\n\tChange the ' \
             'default output filename\n\texample: save --selector ' \
             'ComputerSystem. -f output.json',\
-            summary=u"Saves the selected type's settings to a file.",\
+            summary="Saves the selected type's settings to a file.",\
             aliases=[],\
             optparser=OptionParser())
         self.definearguments(self.parser)
@@ -72,11 +72,11 @@ class SaveCommand(RdmcCommandBase):
                 typeselector = None
                 pathselector = None
 
-                for path, values in content.iteritems():
-                    values = OrderedDict(sorted(values.items(),\
+                for path, values in content.items():
+                    values = OrderedDict(sorted(list(values.items()),\
                                                          key=lambda x: x[0]))
 
-                    for dictentry in values.keys():
+                    for dictentry in list(values.keys()):
                         if dictentry == type_string:
                             typeselector = values[dictentry]
                             pathselector = path
@@ -184,7 +184,7 @@ class SaveCommand(RdmcCommandBase):
         self.filename = None
 
         if options.filename and len(options.filename) > 1:
-            raise InvalidCommandLineError(u"Save command doesn't support " \
+            raise InvalidCommandLineError("Save command doesn't support " \
                     "multiple filenames.")
         elif options.filename:
             self.filename = options.filename[0]

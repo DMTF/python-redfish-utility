@@ -12,7 +12,7 @@ import json
 import shlex
 import subprocess
 
-from queue import Queue
+from six.moves import queue
 from datetime import datetime
 from optparse import OptionParser
 from rdmc_helper import ReturnCodes, InvalidCommandLineError, \
@@ -49,7 +49,7 @@ class LoadCommand(RdmcCommandBase):
         self.definearguments(self.parser)
         self.filenames = None
         self.mpfilename = None
-        self.queue = Queue()
+        self.queue = queue.Queue()
         self._rdmc = rdmcObj
         self.lobobj = rdmcObj.commandsDict["LoginCommand"](rdmcObj)
         self.selobj = rdmcObj.commandsDict["SelectCommand"](rdmcObj)
@@ -113,7 +113,7 @@ class LoadCommand(RdmcCommandBase):
             for loadcontent in loadcontents:
                 skip = False
 
-                for content, loaddict in loadcontent.iteritems():
+                for content, loaddict in loadcontent.items():
                     inputlist = list()
 
                     if content == "Comments":
@@ -128,7 +128,7 @@ class LoadCommand(RdmcCommandBase):
                         raise InvalidCommandLineError("Selector not found.\n")
 
                     try:
-                        for _, items in loaddict.iteritems():
+                        for _, items in loaddict.items():
                             dicttolist = list(items.items())
 
                             if len(dicttolist) < 1:
@@ -206,7 +206,7 @@ class LoadCommand(RdmcCommandBase):
         results = list()
 
         if isinstance(val, dict):
-            for first, second in val.iteritems():
+            for first, second in val.items():
                 (results, finalval) = self.loadmultihelper(first, second, \
                                                                         changes)
                 results.insert(0, sel)
@@ -293,7 +293,7 @@ class LoadCommand(RdmcCommandBase):
         if not contents:
             contents = list()
         for content in contents:
-            for k in content.keys():
+            for k in list(content.keys()):
                 if k.lower() in HARDCODEDLIST or '@odata' in k.lower():
                     del content[k]
 
@@ -320,8 +320,8 @@ class LoadCommand(RdmcCommandBase):
         outputform = '%Y-%m-%d-%H-%M-%S'
 
         if outputdir:
-            if outputdir.endswith(('"',"'")) and \
-                                                outputdir.startswith(('"',"'")):
+            if outputdir.endswith(('"', "'")) and \
+                                                outputdir.startswith(('"', "'")):
                 outputdir=outputdir[1:-1]
 
             if not os.path.isdir(outputdir):

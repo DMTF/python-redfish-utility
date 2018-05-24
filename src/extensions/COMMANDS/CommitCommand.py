@@ -37,14 +37,11 @@ class CommitCommand(RdmcCommandBase):
         """
         self.commitvalidation()
 
-        sys.stdout.write(u"Committing changes...\n")
+        sys.stdout.write("Committing changes...\n")
 
-        try:
-            if not self._rdmc.app.commit(verbose=self._rdmc.opts.verbose):
-                raise NoChangesFoundOrMadeError("No changes found or made " \
-                                                    "during commit operation.")
-        except Exception:
-            raise
+        if not self._rdmc.app.commit(verbose=self._rdmc.opts.verbose):
+            raise NoChangesFoundOrMadeError("No changes found or made " \
+                                                "during commit operation.")
 
         self.logoutobj.logoutfunction("")
 

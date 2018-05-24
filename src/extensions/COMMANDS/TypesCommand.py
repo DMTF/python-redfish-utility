@@ -51,8 +51,7 @@ class TypesCommand(RdmcCommandBase):
         try:
             if len(args) == 0:
                 typeslist = list()
-                typeslist = list(set(self._rdmc.app.types()))
-                typeslist.sort()
+                typeslist = sorted(set(self._rdmc.app.types()))
 
                 if not returntypes:
                     sys.stdout.write("Type options:")

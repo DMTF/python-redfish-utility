@@ -55,23 +55,20 @@ class LoginCommand(RdmcCommandBase):
 
         self.loginvalidation(options, args)
 
-        try:
-            self._rdmc.app.login(username=self.username, \
-                          password=self.password, base_url=self.url, \
-                          verbose=self._rdmc.opts.verbose, \
-                          path=options.path, skipbuild=skipbuild, \
-                          includelogs=options.includelogs)
-        except Exception:
-            raise
+        self._rdmc.app.login(username=self.username, \
+                      password=self.password, base_url=self.url, \
+                      verbose=self._rdmc.opts.verbose, \
+                      path=options.path, skipbuild=skipbuild, \
+                      includelogs=options.includelogs)
 
         # Warning for cache enabled, since we save session in plain text
         if self._rdmc.app.config.get_cache() and not skipbuild:
-            sys.stdout.write(u"WARNING: Cache is activated. Session keys are" \
-                                                    u" stored in plaintext.\n")
+            sys.stdout.write("WARNING: Cache is activated. Session keys are" \
+                                                    " stored in plaintext.\n")
 
         if self._rdmc.opts.debug:
-            sys.stdout.write(u"WARNING: Logger is activated. Logging is" \
-                                                    u" stored in plaintext.\n")
+            sys.stdout.write("WARNING: Logger is activated. Logging is" \
+                                                    " stored in plaintext.\n")
 
         if options.selector:
             try:
@@ -151,16 +148,14 @@ class LoginCommand(RdmcCommandBase):
         :param line: command line input
         :type line: string.
         """
-        try:
-            self.loginfunction(line)
-            if ("-h" in line) or ("--help" in line):
-                return ReturnCodes.SUCCESS
-            if not self._rdmc.app.current_client.monolith._visited_urls:
-                self.logoutobj.run("")
-                raise PathUnavailableError("The path specified by the --path"\
-                                " flag is unavailable.")
-        except Exception:
-            raise
+
+        self.loginfunction(line)
+        if ("-h" in line) or ("--help" in line):
+            return ReturnCodes.SUCCESS
+        if not self._rdmc.app.current_client.monolith._visited_urls:
+            self.logoutobj.run("")
+            raise PathUnavailableError("The path specified by the --path"\
+                            " flag is unavailable.")
 
         #Return code
         return ReturnCodes.SUCCESS

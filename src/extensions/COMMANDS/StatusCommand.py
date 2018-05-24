@@ -67,7 +67,7 @@ class StatusCommand(RdmcCommandBase):
         """
         sys.stdout.write("Current changes found:\n")
         for item in contents:
-            for key, value in item.iteritems():
+            for key, value in item.items():
                 if selector and key.lower().startswith(selector.lower()):
                     sys.stdout.write("%s (Currently selected)\n" % key)
                 else:
@@ -75,17 +75,17 @@ class StatusCommand(RdmcCommandBase):
                 for content in value:
                     try:
                         if isinstance(content[0]["value"], int):
-                            sys.stdout.write(u'\t%s=%s' % \
+                            sys.stdout.write('\t%s=%s' % \
                                  (content[0]["path"][1:], content[0]["value"]))
                         elif not isinstance(content[0]["value"], bool) and \
                                             not len(content[0]["value"]) == 0:
                             if content[0]["value"][0] == '"' and \
                                                 content[0]["value"][-1] == '"':
-                                sys.stdout.write(u'\t%s=%s' % \
+                                sys.stdout.write('\t%s=%s' % \
                                                     (content[0]["path"][1:], \
                                                     content[0]["value"][1:-1]))
                             else:
-                                sys.stdout.write(u'\t%s=%s' % \
+                                sys.stdout.write('\t%s=%s' % \
                                                     (content[0]["path"][1:], \
                                                      content[0]["value"]))
                         else:
@@ -95,21 +95,21 @@ class StatusCommand(RdmcCommandBase):
                                 if len(output) == 0:
                                     output = '""'
 
-                            sys.stdout.write(u'\t%s=%s' % \
+                            sys.stdout.write('\t%s=%s' % \
                                              (content[0]["path"][1:], output))
                     except:
                         if isinstance(content["value"], int):
-                            sys.stdout.write(u'\t%s=%s' % \
+                            sys.stdout.write('\t%s=%s' % \
                                  (content["path"][1:], content["value"]))
                         elif not isinstance(content["value"], bool) and \
                                                 not len(content["value"]) == 0:
                             if content["value"][0] == '"' and \
                                                     content["value"][-1] == '"':
-                                sys.stdout.write(u'\t%s=%s' % \
+                                sys.stdout.write('\t%s=%s' % \
                                                         (content["path"][1:], \
                                                         content["value"]))
                             else:
-                                sys.stdout.write(u'\t%s=%s' % \
+                                sys.stdout.write('\t%s=%s' % \
                                                         (content["path"][1:], \
                                                         content["value"]))
                         else:
@@ -119,7 +119,7 @@ class StatusCommand(RdmcCommandBase):
                                 if len(output) == 0:
                                     output = '""'
 
-                            sys.stdout.write(u'\t%s=%s' % \
+                            sys.stdout.write('\t%s=%s' % \
                                                 (content["path"][1:], output))
                     sys.stdout.write('\n')
 

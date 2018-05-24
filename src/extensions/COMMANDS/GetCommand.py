@@ -125,10 +125,10 @@ class GetCommand(RdmcCommandBase):
                                                 'found for entries: %s' % line)
 
         for content in contents:
-            content = OrderedDict(sorted(content.items(), key=lambda x: x[0]))
+            content = OrderedDict(sorted(list(content.items()), key=lambda x: x[0]))
 
             if not uselist:
-                for k in content.keys():
+                for k in list(content.keys()):
                     if k.lower() in HARDCODEDLIST or '@odata' in k.lower():
                         del content[k]
 
@@ -153,7 +153,7 @@ class GetCommand(RdmcCommandBase):
                                 break
                             else:
                                 content = content[0]
-                        for key in content.keys():
+                        for key in list(content.keys()):
                             if item.lower() == key.lower():
                                 newlist.append(key)
                                 content = content.get(key)
@@ -219,7 +219,7 @@ class GetCommand(RdmcCommandBase):
                     break
                 else:
                     content = content[0]
-            for key in content.keys():
+            for key in list(content.keys()):
                 if item.lower() == key.lower():
                     newlist.append(key)
                     content = content.get(key)
@@ -257,7 +257,7 @@ class GetCommand(RdmcCommandBase):
         final = dict()
 
         for item in content:
-            for num, _ in item.iteritems():
+            for num, _ in item.items():
                 try:
                     final[num].update(item[num])
                 except:

@@ -27,6 +27,8 @@ import redfish.rest.v1
 import cliutils
 import extensions
 
+from six.moves import input
+
 from rdmc_helper import ReturnCodes, ConfigurationFileError, \
                     CommandNotEnabledError, InvalidCommandLineError, \
                     InvalidCommandLineErrorOPTS, InvalidFileFormattingError, \
@@ -54,11 +56,6 @@ for name in extensions.classNames:
         sys.stderr.write("Error locating extension %s at location %s\n" % \
                                                 (cName, 'extensions' + name))
         raise
-
-try:
-   input = raw_input
-except NameError:
-   pass
 
 #---------End of imports---------
 
@@ -115,7 +112,7 @@ class RdmcCommand(RdmcCommandBase):
         :param cmdname: command to be searched
         :type cmdname: str.
         """
-        for vals in self._commands.values():
+        for vals in list(self._commands.values()):
             for cmd in vals:
                 if cmd.ismatch(cmdname):
                     if not cmd.is_enabled():
@@ -154,15 +151,16 @@ class RdmcCommand(RdmcCommandBase):
         :param line: entered command line
         :type line: list.
         """
-        if os.name == 'nt':
-            if not ctypes.windll.shell32.IsUserAnAdmin() != 0:
-                UI().user_not_admin()
-                raw_input("Press enter to exit")
-                sys.exit(ReturnCodes.USER_NOT_ADMIN)
-        elif not os.getuid() == 0:
-            UI().user_not_admin()
-            raw_input("Press enter to exit")
-            sys.exit(ReturnCodes.USER_NOT_ADMIN)
+		#TODO: Uncomment if admin check for local system is desired.
+        # if os.name == 'nt':
+            # if not ctypes.windll.shell32.IsUserAnAdmin() != 0:
+                # UI().user_not_admin()
+                # input("Press enter to exit")
+                # sys.exit(ReturnCodes.USER_NOT_ADMIN)
+        # elif not os.getuid() == 0:
+            # UI().user_not_admin()
+            # input("Press enter to exit")
+            # sys.exit(ReturnCodes.USER_NOT_ADMIN)
 
         nargv = []
         curr = []
@@ -314,7 +312,7 @@ class RdmcCommand(RdmcCommandBase):
                 self.handle_exceptions(excp)
 
             if self.opts.verbose:
-                sys.stdout.write(u"REDFISH return code: %s\n" % self.retcode)
+                sys.stdout.write("REDFISH return code: %s\n" % self.retcode)
 
         return self.retcode
 
@@ -381,7 +379,7 @@ class RdmcCommand(RdmcCommandBase):
         # ****** RMC/RIS ERRORS ******
         except redfish.ris.UndefinedClientError:
             self.retcode = ReturnCodes.RIS_UNDEFINED_CLIENT_ERROR
-            UI().error(u"Please login before making a selection")
+            UI().error("Please login before making a selection")
         except redfish.ris.InstanceNotFoundError as excp:
             self.retcode = ReturnCodes.RIS_INSTANCE_NOT_FOUND_ERROR
             UI().printmsg(excp)
@@ -400,7 +398,7 @@ class RdmcCommand(RdmcCommandBase):
         except redfish.ris.rmc_helper.SessionExpired as excp:
             self.retcode = ReturnCodes.RIS_SESSION_EXPIRED
             self.app.logout()
-            UI().printmsg(u"Current session has expired or is invalid, "\
+            UI().printmsg("Current session has expired or is invalid, "\
                     "please login again with proper credentials to continue.\n")
         # ****** RMC/RIS ERRORS ******
         except redfish.rest.v1.RetriesExhaustedError as excp:
@@ -415,14 +413,14 @@ class RdmcCommand(RdmcCommandBase):
             UI().error(excp)
         except redfish.ris.rmc_helper.InvalidPathError as excp:
             self.retcode = ReturnCodes.RIS_REF_PATH_NOT_FOUND_ERROR
-            UI().printmsg(u"Reference path not found.")
+            UI().printmsg("Reference path not found.")
         # ****** GENERAL ERRORS ******
         except SystemExit:
             self.retcode = ReturnCodes.GENERAL_ERROR
             raise
         except Exception as excp:
             self.retcode = ReturnCodes.GENERAL_ERROR
-            sys.stderr.write(u'ERROR: %s\n' % excp)
+            sys.stderr.write('ERROR: %s\n' % excp)
 
             if self.opts.debug:
                 traceback.print_exc(file=sys.stderr)
@@ -439,8 +437,7 @@ class RdmcCommand(RdmcCommandBase):
         typeslist = list()
 
         try:
-            typeslist = list(set(self.app.types()))
-            typeslist.sort()
+            typeslist = sorted(set(self.app.types()))
             changes["select"] = typeslist
         except:
             pass
@@ -451,11 +448,11 @@ class RdmcCommand(RdmcCommandBase):
             templist = self.app.get_save()
 
             for content in templist:        
-                for k in content.keys():        
+                for k in list(content.keys()):        
                     if k.lower() in HARDCODEDLIST or '@odata' in k.lower():
                         del content[k]
 
-            for key, _ in templist[0].iteritems():
+            for key, _ in list(templist[0].items()):
                 getlist.append(key)
 
             getlist.sort()
@@ -504,7 +501,7 @@ class TabAndHistoryCompletionClass(object):
                 try:
                     if begin == 0:
                         # first word
-                        candidates = self.options.keys()
+                        candidates = list(self.options.keys())
                     else:
                         # later word
                         first = words[0]
@@ -538,7 +535,7 @@ class TabAndHistoryCompletionClass(object):
         """
         # Loop through options passed and add them to them
         # to the current tab options list
-        for key, value in options.iteritems():
+        for key, value in list(options.items()):
             self.options[key] = value
 
 
@@ -585,7 +582,7 @@ if __name__ == '__main__':
     RDMC.retcode = RDMC.run(ARGUMENTS)
 
     if RDMC.opts.verbose:
-        sys.stdout.write(u"return code: %s\n" % RDMC.retcode)
+        sys.stdout.write("return code: %s\n" % RDMC.retcode)
 
     # Return code
     sys.exit(RDMC.retcode)

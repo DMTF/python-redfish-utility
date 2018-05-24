@@ -48,21 +48,20 @@ class HelpCommand(RdmcCommandBase):
             RdmcOptionParser().print_help()
             if self._rdmc:
                 cmddict = self._rdmc.get_commands()
-                sorted_keys = cmddict.keys()
-                sorted_keys.sort()
+                sorted_keys = sorted(list(cmddict.keys()))
 
                 for key in sorted_keys:
                     if key[0] == '_':
                         continue
                     else:
-                        sys.stdout.write(u'\n%s\n' % key)
+                        sys.stdout.write('\n%s\n' % key)
 
                     for cmd in cmddict[key]:
                         cmd.print_summary()
         else:
             if self._rdmc:
                 cmddict = self._rdmc.get_commands()
-                sorted_keys = cmddict.keys()
+                sorted_keys = list(cmddict.keys())
                 for key in sorted_keys:
                     for cmd in cmddict[key]:
                         if cmd.ismatch(args[0]):

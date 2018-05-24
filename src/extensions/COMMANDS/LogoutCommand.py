@@ -50,12 +50,8 @@ class LogoutCommand(RdmcCommandBase):
         :param line: command line input
         :type line: string.
         """
-        try:
-            sys.stdout.write(u"Logging session out.\n")
-            self.logoutfunction(line)
-        except Exception:
-            raise
-
+        sys.stdout.write("Logging session out.\n")
+        self.logoutfunction(line)
         #Return code
         return ReturnCodes.SUCCESS
 

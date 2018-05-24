@@ -10,6 +10,7 @@
 #---------Imports---------
 
 import os
+import six
 import glob
 import shlex
 
@@ -106,7 +107,7 @@ class CommandBase(object):
         lines.append(' '.join(line))
 
         sep = '\n' + (' ' * 34)
-        print("  %-28s - %s" % (self.name, sep.join(lines)))
+        print(("  %-28s - %s" % (self.name, sep.join(lines))))
 
     def _parse_arglist(self, line=None):
         """parses line into an options and args taking
@@ -120,7 +121,7 @@ class CommandBase(object):
             return self.parser.parse_args(line)
 
         arglist = []
-        if isinstance(line, basestring):
+        if isinstance(line, six.string_types):
             arglist = shlex.split(line, posix=False)
             for ind, val in enumerate(arglist):
                 arglist[ind] = val.strip('"\'')
